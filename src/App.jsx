@@ -22,10 +22,6 @@ import {
   History,
   Headset,
   ExternalLink,
-  CreditCard,
-  HeartHandshake,
-  Phone,
-  Wallet,
 } from "lucide-react";
 
 function TikTokIcon({ size = 16, className = "" }) {
@@ -95,24 +91,6 @@ function isYouTubeUrl(raw) {
 
 function hasTimestamps(text) {
   return /\b\d{1,2}:\d{2}\b/.test(text || "");
-}
-
-function normalizePhone(raw) {
-  const s = String(raw || "").trim();
-  if (!s) return "";
-  const digits = s.replace(/[^\d+]/g, "");
-  if (digits.startsWith("+")) return digits.slice(1);
-  if (digits.startsWith("62")) return digits;
-  if (digits.startsWith("0")) return `62${digits.slice(1)}`;
-  return digits;
-}
-
-function buildWaLink(phoneOrEmpty, text) {
-  const p = normalizePhone(phoneOrEmpty);
-  const q = text ? `?text=${encodeURIComponent(text)}` : "";
-  if (p) return `https://wa.me/${p}${q}`;
-  if (text) return `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-  return "https://wa.me/";
 }
 
 function CustomSelect({ value, onChange, options, disabled = false }) {
@@ -255,16 +233,13 @@ function safeJsonParse(raw, fallback) {
 }
 
 export default function App() {
-  const imgZakrenz = "https://files.catbox.moe/f0rsf5.png";
+  const imgIcon = "/image/rhmt-icon.png";
   const clickSfx = "https://files.catbox.moe/tk3jff.mp3";
 
   const ADMIN = {
-    waText: "Halo admin, saya mau tanya soal Z-YouTube Transcript.",
-    waNumber: "087742898019",
-    tiktokLink: "https://www.tiktok.com/@zakrenzreal",
-    githubLink: "https://github.com/Zakrenzdev",
-    danaNumber: "087742898019",
-    donateLabel: "Donasi (DANA)",
+    waLink: "https://chat.whatsapp.com/IfWRoOW9H4HAHj689XKH4M?mode=hqctcla",
+    tiktokLink: "https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu",
+    githubLink: "https://github.com/rahmat-369",
   };
 
   const HISTORY_KEYS = {
@@ -307,7 +282,7 @@ export default function App() {
     { role: "user", content: "Halo siapa kamu?" },
     {
       role: "assistant",
-      content: "Aku adalah Z-Clipper AI yang dibuat oleh Zakrenz. Tempel transkrip, pilih mode output, aku bikinin hasil siap edit.",
+      content: "Aku adalah AI asisten yang dibuat oleh R_hmt ofc. Tempel transkrip, pilih mode output, aku bikinin hasil siap edit.",
     },
   ]);
 
@@ -574,7 +549,7 @@ Output:
 
   const buildClipperPrompt = (text, userCustom, mode) => {
     const textHasTs = hasTimestamps(text);
-    const basePrompt = `Kamu adalah "Z-Clipper AI" untuk creator Indonesia.
+    const basePrompt = `Kamu adalah asisten AI untuk creator Indonesia.
 Aturan:
 - Jangan ngajarin teori.
 - Jangan panjang-panjang.
@@ -634,7 +609,7 @@ Aturan:
       { role: "user", content: "Halo siapa kamu?" },
       {
         role: "assistant",
-        content: "Aku adalah Z-Clipper AI yang dibuat oleh Zakrenz. Tempel transkrip, pilih mode output, aku bikinin hasil siap edit.",
+        content: "Aku adalah AI asisten yang dibuat oleh R_hmt ofc. Tempel transkrip, pilih mode output, aku bikinin hasil siap edit.",
       },
     ]);
     pushToast({ type: "info", title: "Clear", message: "Chat dibersihkan.", duration: 1600 });
@@ -685,9 +660,6 @@ Aturan:
     loadChatHistory();
     setHistoryOpen(true);
   };
-
-  const waHref = buildWaLink(ADMIN.waNumber, ADMIN.waText);
-  const danaNumber = String(ADMIN.danaNumber || "").trim();
 
   return (
     <div
@@ -792,7 +764,7 @@ Aturan:
             <div className="bg-[#111111] text-white p-2 rounded-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-black/10">
               <Youtube size={20} strokeWidth={2.5} className="group-hover:text-red-500 transition-colors duration-300" />
             </div>
-            <h1 className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">YT Transcript</h1>
+            <h1 className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">Youtube transcript by rhmt</h1>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-semibold text-gray-600 bg-gray-100/70 px-3 py-1.5 rounded-full border border-gray-200/70 cursor-default hover:bg-gray-200/70 transition-colors shadow-sm">
@@ -926,7 +898,7 @@ Aturan:
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-[72px] flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
             <Youtube size={16} className="text-gray-400" />
-            <span>&copy; {new Date().getFullYear()} ZakrenzModder.</span>
+            <span>&copy; {new Date().getFullYear()} R_hmt ofc.</span>
           </div>
 
           <div className="flex items-center gap-6 text-sm text-gray-500 font-medium">
@@ -984,13 +956,13 @@ Aturan:
         </button>
       </div>
 
-      <DialogShell open={aboutOpen} onClose={() => setAboutOpen(false)} title="About Z-Clipper" subtitle="Untuk para clipper" icon={<Wand2 size={18} />}>
+      <DialogShell open={aboutOpen} onClose={() => setAboutOpen(false)} title="About AI" subtitle="Asisten Konten" icon={<Wand2 size={18} />}>
         <div className="flex items-center gap-4">
           <div className="h-14 w-14 rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 shrink-0">
-            <img src={imgZakrenz} alt="Zakrenz" className="w-full h-full object-cover" draggable={false} />
+            <img src={imgIcon} alt="Icon" className="w-full h-full object-cover" draggable={false} />
           </div>
           <div className="min-w-0">
-            <div className="text-base font-extrabold text-gray-900">Z-Clipper AI</div>
+            <div className="text-base font-extrabold text-gray-900">AI Assistant</div>
             <div className="text-sm font-semibold text-gray-600 leading-snug">Clip ideas, chapters, summary, rewrite. Output siap edit.</div>
           </div>
         </div>
@@ -1005,7 +977,7 @@ Aturan:
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-          <div className="text-xs font-bold text-gray-500">© {new Date().getFullYear()} Zakrenz</div>
+          <div className="text-xs font-bold text-gray-500">© {new Date().getFullYear()} R_hmt ofc</div>
           <button
             onClick={() => setAboutOpen(false)}
             className="px-4 py-2 rounded-2xl bg-gray-900 text-white text-sm font-extrabold hover:bg-black active:scale-95 transition"
@@ -1178,12 +1150,12 @@ Aturan:
         </div>
       </DialogShell>
 
-      <DialogShell open={contactOpen} onClose={() => setContactOpen(false)} title="Hubungi Admin" subtitle="WhatsApp • Sosial • Donasi (DANA)" icon={<Headset size={18} />} widthClass="max-w-[520px]">
+      <DialogShell open={contactOpen} onClose={() => setContactOpen(false)} title="Hubungi Admin" subtitle="WhatsApp • Sosial" icon={<Headset size={18} />} widthClass="max-w-[520px]">
         <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
           <div className="text-sm font-extrabold text-gray-900">Kontak</div>
           <div className="mt-3 grid grid-cols-1 gap-2">
             <a
-              href={waHref}
+              href={ADMIN.waLink}
               target="_blank"
               rel="noreferrer"
               className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white flex items-center justify-between gap-3 hover:bg-gray-50 active:scale-[0.99] transition"
@@ -1193,7 +1165,7 @@ Aturan:
                 <div className="text-sm font-extrabold text-gray-900 flex items-center gap-2">
                   <MessageCircle size={16} className="text-gray-900" /> WhatsApp
                 </div>
-                <div className="text-xs font-bold text-gray-500 truncate">Chat admin</div>
+                <div className="text-xs font-bold text-gray-500 truncate">Join Group</div>
               </div>
               <ExternalLink size={16} className="text-gray-700" />
             </a>
@@ -1232,47 +1204,8 @@ Aturan:
           </div>
         </div>
 
-        <div className="mt-3 rounded-2xl border border-gray-200 bg-white p-4">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-extrabold text-gray-900 flex items-center gap-2">
-              <Wallet size={16} className="text-gray-900" /> {ADMIN.donateLabel}
-            </div>
-            <CreditCard size={16} className="text-gray-700" />
-          </div>
-
-          <div className="mt-2 text-sm font-semibold text-gray-600 leading-snug">Nomor DANA:</div>
-          <div className="mt-1 rounded-2xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-extrabold text-gray-900 flex items-center justify-between gap-2">
-            <span className="truncate">{danaNumber || "-"}</span>
-            <Phone size={16} className="text-gray-600" />
-          </div>
-
-          <div className="mt-3 flex items-center gap-2">
-            <button
-              onClick={() => copyText(danaNumber)}
-              className={`flex-1 px-4 py-3 rounded-2xl bg-gray-900 text-white text-sm font-extrabold flex items-center justify-center gap-2 hover:bg-black active:scale-[0.99] transition ${
-                danaNumber ? "" : "opacity-60 pointer-events-none"
-              }`}
-              style={{ WebkitTapHighlightColor: "transparent" }}
-            >
-              Salin nomor DANA <Copy size={16} />
-            </button>
-            <a
-              href="https://link.dana.id/"
-              target="_blank"
-              rel="noreferrer"
-              className="h-12 w-12 rounded-2xl border border-gray-200 bg-white grid place-items-center text-gray-800 hover:bg-gray-50 active:scale-95 transition"
-              style={{ WebkitTapHighlightColor: "transparent" }}
-              aria-label="Buka DANA"
-            >
-              <ExternalLink size={16} />
-            </a>
-          </div>
-
-          <div className="mt-2 text-[11px] font-bold text-gray-500">Buka DANA → Send → Send to a Friend → paste nomor.</div>
-        </div>
-
         <div className="mt-4 flex items-center justify-between">
-          <div className="text-xs font-bold text-gray-500">© {new Date().getFullYear()} Zakrenz</div>
+          <div className="text-xs font-bold text-gray-500">© {new Date().getFullYear()} R_hmt ofc</div>
           <button
             onClick={() => setContactOpen(false)}
             className="px-4 py-2 rounded-2xl bg-gray-900 text-white text-sm font-extrabold hover:bg-black active:scale-95 transition"
@@ -1298,7 +1231,7 @@ Aturan:
                 <Wand2 size={18} />
               </div>
               <div className="min-w-0">
-                <div className="text-sm font-extrabold text-gray-900 leading-tight">Z-Clipper AI</div>
+                <div className="text-sm font-extrabold text-gray-900 leading-tight">AI Assistant</div>
                 <div className="text-xs font-semibold text-gray-500 leading-tight">Chat khusus transkrip</div>
               </div>
             </div>
@@ -1411,10 +1344,10 @@ Aturan:
               </button>
             </div>
 
-            <div className="mt-2 text-[11px] font-bold text-gray-500">&copy; {new Date().getFullYear()} ZakrenzSoci£ty.</div>
+            <div className="mt-2 text-[11px] font-bold text-gray-500">&copy; {new Date().getFullYear()} R_hmt ofc.</div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+      }
